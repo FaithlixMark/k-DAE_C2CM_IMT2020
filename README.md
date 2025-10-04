@@ -49,34 +49,34 @@ Yaniv Opochinsky, Shlomo E. Chazan, Sharon Gannot and Jacob Goldberger
 
 ## Information on how to invoke in CLI:
 
--sd or --save_dir: dump k_dae.log
--dn or --dataset_name: sets dataset to cluster
-cost: C2CM
-imt2020: IMT-2020
--ds_num or --dataset_number: chooses file from C2CM/IMT-2020 that ranges from 1-8
+- -sd or --save_dir: dump k_dae.log
+- -dn or --dataset_name: sets dataset to cluster
+  cost: C2CM
+  imt2020: IMT-2020
+- -ds_num or --dataset_number: chooses file from C2CM/IMT-2020 that ranges from 1-8
 
-    		for cost:
-    		1:1_Indoor_B1_LOS_Single_Results
-                        2:2_Indoor_B2_LOS_Single_Results
-                        3:3_SemiUrban_B1_LOS_Single_Results
-                        4:4_SemiUrban_B2_LOS_Single_Results
-                        5:5_SemiUrban_B1_NLOS_Single_Results
-                        6:6_SemiUrban_B2_NLOS_Single_Results
-                        7:7_SemiUrban_B1_LOS_Multiple_Results
-                        8:8_SemiUrban_B2_LOS_Multiple_Results
+  for cost:
+  1:1_Indoor_B1_LOS_Single_Results
+  2:2_Indoor_B2_LOS_Single_Results
+  3:3_SemiUrban_B1_LOS_Single_Results
+  4:4_SemiUrban_B2_LOS_Single_Results
+  5:5_SemiUrban_B1_NLOS_Single_Results
+  6:6_SemiUrban_B2_NLOS_Single_Results
+  7:7_SemiUrban_B1_LOS_Multiple_Results
+  8:8_SemiUrban_B2_LOS_Multiple_Results
 
-    		for imt2020:
-    		1:1_InH_A_LOS_Results
-                        2:2_InH_A_NLOS_Results
-                        3:3_RMa_A_LOS_Results
-                        4:4_RMa_A_NLOS_Results
-                        5:5_UMa_A_LOS_Results
-                        6:6_UMa_A_NLOS_Results
-                        7:7_UMi_A_LOS_Results
-                        8:8_UMi_A_NLOS_Results
+  for imt2020:
+  1:1_InH_A_LOS_Results
+  2:2_InH_A_NLOS_Results
+  3:3_RMa_A_LOS_Results
+  4:4_RMa_A_NLOS_Results
+  5:5_UMa_A_LOS_Results
+  6:6_UMa_A_NLOS_Results
+  7:7_UMi_A_LOS_Results
+  8:8_UMi_A_NLOS_Results
 
--sn or --sheet_number: chooses sheet number from the dataset ranging [1:30] per excel file
--create or --create_new_excel: decide if a new file will be (1) create or (0) proceed
+- -sn or --sheet_number: chooses sheet number from the dataset ranging [1:30] per excel file
+- -create or --create_new_excel: decide if a new file will be (1) create or (0) proceed
 
 For more info please refer to this paper: https://drive.google.com/file/d/1AMQVQDl2xmSlYwidBWxXGFyK3ef_qXhv/view?usp=sharing
 
