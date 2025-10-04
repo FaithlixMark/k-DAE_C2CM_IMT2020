@@ -58,8 +58,8 @@ Yaniv Opochinsky, Shlomo E. Chazan, Sharon Gannot and Jacob Goldberger
 - -ds_num or --dataset_number: chooses file from C2CM/IMT-2020 that ranges from 1-8
 
                                 for cost:
-                                1:1_Indoor_B1_LOS_Single_Results
-                                2:2_Indoor_B2_LOS_Single_Results
+                                - 1:1_Indoor_B1_LOS_Single_Results
+                                - 2:2_Indoor_B2_LOS_Single_Results
                                 3:3_SemiUrban_B1_LOS_Single_Results
                                 4:4_SemiUrban_B2_LOS_Single_Results
                                 5:5_SemiUrban_B1_NLOS_Single_Results
