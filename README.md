@@ -1,61 +1,100 @@
 # k-DAE-C2CM-and-IMT-2020-Mastercode
-K-AUTOENCODERS DEEP CLUSTERING
----------------------------------------------------------------
+
+## K-AUTOENCODERS DEEP CLUSTERING
+
 This repo contains the source code for our paper:
 
-[**K-AUTOENCODERS DEEP CLUSTERING**](http://www.eng.biu.ac.il/goldbej/files/2020/02/ICASSP_2020_Yaniv.pdf) 
+[**K-AUTOENCODERS DEEP CLUSTERING**](http://www.eng.biu.ac.il/goldbej/files/2020/02/ICASSP_2020_Yaniv.pdf)
 <br>
 Yaniv Opochinsky, Shlomo E. Chazan, Sharon Gannot and Jacob Goldberger
 
+---
 
-
-
-
----------------------------------------------------------------  
 #### How to Use?
-* clone the repo
-* cd to the cloned dir 
-* conda create -n k_dae python=3.6 
-* conda activate k_dae 
-* pip install - Requirements
 
+- clone the repo
+- cd to the cloned dir
+- conda create -n k_dae python=3.6
+- conda activate k_dae
+- pip install - Requirements
 
-### Run example: 
-* `python main.py -dn mnist` 
+### Run example:
 
-#### Optional Args: 
+- `python main.py -dn mnist`
 
-* `--dataset_name` - The name of dataset [imt2020 / cost] default: imt2020
-* `--save_dir` - path to output folder. (contains logs and model.)
-* Dataset link: https://drive.google.com/drive/folders/1yZ6iIZC9cKYUyfTlUnZsYt2B1uotG2pd?usp=sharing
+#### Optional Args:
+
+- `--dataset_name` - The name of dataset [imt2020 / cost] default: imt2020
+- `--save_dir` - path to output folder. (contains logs and model.)
+- Dataset link: https://drive.google.com/drive/folders/1yZ6iIZC9cKYUyfTlUnZsYt2B1uotG2pd?usp=sharing
 
 ### Requirements
-* Python = 3.11.2
-* Tensorflow = 2.14.0
-* Tensorflow-estimator = 2.14.0
-* Numpy = 1.24.2
-* Scipy = 1.10.1
-* Scikit-learn = 1.3.2
-* Keras = 2.14.0
-* openpyxl = 3.1.2
-* pandas = 2.2.0
+
+- Python = 3.11.2
+- Tensorflow = 2.14.0
+- Tensorflow-estimator = 2.14.0
+- Numpy = 1.24.2
+- Scipy = 1.10.1
+- Scikit-learn = 1.3.2
+- Keras = 2.14.0
+- openpyxl = 3.1.2
+- pandas = 2.2.0
+
+## How to use in CLI:
+
+- go to the k-DAE_C2CM_IMT2020 directory where the main.py is located.
+
+- invoke the command in the directory where main.py is located.
+  Sample command: python main.py -sd result -dn cost -ds_num 1 -sn 1 -create 1
+
+## Information on how to invoke in CLI:
+
+-sd or --save_dir: dump k_dae.log
+-dn or --dataset_name: sets dataset to cluster
+cost: C2CM
+imt2020: IMT-2020
+-ds_num or --dataset_number: chooses file from C2CM/IMT-2020 that ranges from 1-8
+
+    		for cost:
+    		1:1_Indoor_B1_LOS_Single_Results
+                        2:2_Indoor_B2_LOS_Single_Results
+                        3:3_SemiUrban_B1_LOS_Single_Results
+                        4:4_SemiUrban_B2_LOS_Single_Results
+                        5:5_SemiUrban_B1_NLOS_Single_Results
+                        6:6_SemiUrban_B2_NLOS_Single_Results
+                        7:7_SemiUrban_B1_LOS_Multiple_Results
+                        8:8_SemiUrban_B2_LOS_Multiple_Results
+
+    		for imt2020:
+    		1:1_InH_A_LOS_Results
+                        2:2_InH_A_NLOS_Results
+                        3:3_RMa_A_LOS_Results
+                        4:4_RMa_A_NLOS_Results
+                        5:5_UMa_A_LOS_Results
+                        6:6_UMa_A_NLOS_Results
+                        7:7_UMi_A_LOS_Results
+                        8:8_UMi_A_NLOS_Results
+
+-sn or --sheet_number: chooses sheet number from the dataset ranging [1:30] per excel file
+-create or --create_new_excel: decide if a new file will be (1) create or (0) proceed
 
 For more info please refer to this paper: https://drive.google.com/file/d/1AMQVQDl2xmSlYwidBWxXGFyK3ef_qXhv/view?usp=sharing
 
-### Abstract 
+### Abstract
+
 Channel modeling plays a significant role in designing and evaluating wire
 less communication systems. Geometric-Based Stochastic Channel Modelling
- (GBSCM) rely on the statistical distribution of multipath waves which arrive at
- the receiver with similar parameters and are called clusters. This study investi
+(GBSCM) rely on the statistical distribution of multipath waves which arrive at
+the receiver with similar parameters and are called clusters. This study investi
 gates the performance of k-Deep Autoencoder (k-DAE) in clustering the multi
 path components (MPC)s from the COST 2100 (C2CM) and International Mobile
- Telecommunications-2020 Channel Model (IMT-2020) channel models. Further
+Telecommunications-2020 Channel Model (IMT-2020) channel models. Further
 more, the algorithm is modified by its activation function and optimizer, namely:
- Sigmoid, Rectified Linear Unit (ReLU), with Adaptive Momentum (ADAM) and
- Stochastic Gradient Descent (SGD) as the optimizers. The results showed that the
- Sigmoid-SGD configuration outperforms all the other configurations, both in C2CM
- and IMT-2020 datasets. The configuration increased in Jaccard Index (JI) by 0.016
- at the 10th percentile, 0.019 for the median, and 0.3595 at the 90th percentile
- for the C2CM dataset compared to default configuration. On the other hand, the
- algorithm performance of the IMT-2020 data, increased in JI by 0.004, and 0.1, for
- the 10th, and 50th percentile, respectively.
+Sigmoid, Rectified Linear Unit (ReLU), with Adaptive Momentum (ADAM) and
+Stochastic Gradient Descent (SGD) as the optimizers. The results showed that the
+Sigmoid-SGD configuration outperforms all the other configurations, both in C2CM
+and IMT-2020 datasets. The configuration increased in Jaccard Index (JI) by 0.016
+at the 10th percentile, 0.019 for the median, and 0.3595 at the 90th percentile
+for the C2CM dataset compared to default configuration. On the other hand, the
+algorithm performance of the IMT-2020 data, increased in JI by 0.004, and 0.1, for
+the 10th, and 50th percentile, respectively.

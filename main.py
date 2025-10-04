@@ -45,11 +45,32 @@ if __name__ == '__main__':
                         choices=['cost','imt2020'],
                         default='cost',
                         help='dataset name [cost,imt2020] ')
+    
+    parser.add_argument('-ds_num', '--dataset_number',
+                        type=int,
+                        choices= range(1, 9),
+                        default=1,
+                        help='dataset number [1,2,3,4,5,6,7,8] ')
+    
+    parser.add_argument('-sn', '--sheet_number',
+                        type=int,
+                        choices= range(1,31),
+                        default=1,
+                        help='dataset sheet number [1:30] ')
+    
+    parser.add_argument('-create', '--create_new_excel',
+                        type=int,
+                        choices= range(0,2),
+                        default=1,
+                        help='1 for create a new excel file, 0 for not creating a new excel file [0,1] ')
 
     FLAGS, unparsed = parser.parse_known_args()
     save_dir_name = FLAGS.save_dir
     dataset_name = FLAGS.dataset_name
-    xlsxname, dataset_name = utils.menu('Sample')
+    dataset_number = FLAGS.dataset_number
+    sheet_number = FLAGS.sheet_number
+    create_new_excel = FLAGS.create_new_excel
+    xlsxname, dataset_name = utils.menu('Sample', dataset_name, dataset_number)
     clustering_results_path = os.path.join('clustering_results', dataset_name)
     full_clustering_results_path = os.path.join(clustering_results_path, f'{xlsxname}.xlsx')
     print("")
@@ -77,17 +98,16 @@ if __name__ == '__main__':
         try:
             print("=========================================== Select your choice... ==================================================")
             print()
+            print('0 - Proceed')
             print('1 - Create a New Excel File')
-            print('2 - Proceed')
             print()
-            option1 = int(input('Select your choice: '))
-            if option1 == 1:
+            if create_new_excel == 1:
                 df1 = pd.DataFrame()
                 df1.to_excel(full_clustering_results_path, index=False)
                 print('full_clustering_results_path:', full_clustering_results_path)
                 print("Excel file created: {}.xlsx".format(xlsxname))
                 break
-            elif option1 == 2:
+            elif create_new_excel == 0:
                 print('full_clustering_results_path:', full_clustering_results_path)
                 print("Excel file already created: {}.xlsx".format(xlsxname))
                 break
@@ -98,7 +118,7 @@ if __name__ == '__main__':
             print('Invalid Option. Please try again.')
     print()
    
-    x_train, y_train, sheet_name = utils.load_data(dataset_name, xlsxname)    
+    x_train, y_train, sheet_name = utils.load_data(dataset_name, xlsxname, sheet_number)    
     tic = timeit.default_timer()
     print('================================ Initializing k-DAE model variablies ... ============================================')
     n_cluster = len(np.unique(y_train))

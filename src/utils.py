@@ -30,14 +30,13 @@ class utils:
     def config_logger(log_path='k_dae.log'):
         logging.basicConfig(filename=log_path, level=logging.DEBUG, filemode='w',
                             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s') 
-    def menu(ExcelName):
+    def menu(ExcelName, dataset_name,dataset_number):
         """ Menu for selecting datasets and filenames"""
         while True:
             print("=========================================== Selecting datasets... ==================================================")
             print('Choose dataset:\nC2CM Datasets: cost\nIMT-2020 Datasets: imt2020')
-            data = str(input('Select datasets: '))
             print()
-            match data:
+            match dataset_name:
                 case 'cost':
                     print("=========================================== C2CM dataset is selected ===============================================")
                     cost_options = [
@@ -55,11 +54,10 @@ class utils:
                     print("=========================================== C2CM dataset is selected ===============================================")
                     while True:
                         try: 
-                            option = int(input('Select a number for the filename: '))
-                            if 1 <= option <= len(cost_options):
-                                ExcelName = cost_options[option - 1]
+                            if 1 <= dataset_number <= len(cost_options):
+                                ExcelName = cost_options[dataset_number - 1]
                                 print(ExcelName + '\n')
-                                return ExcelName, data
+                                return ExcelName, dataset_name
                             else:
                                 print('Invalid Option.')
                         except ValueError:
@@ -81,11 +79,10 @@ class utils:
                     print("========================================= IMT-2020 dataset is selected =============================================")
                     while True:
                         try:
-                            option = int(input('Select a number for the filename: '))
-                            if 1 <= option <= len(imt_2020_options):
-                                ExcelName = imt_2020_options[option - 1]
+                            if 1 <= dataset_number <= len(imt_2020_options):
+                                ExcelName = imt_2020_options[dataset_number - 1]
                                 print(ExcelName + '\n')
-                                return ExcelName, data
+                                return ExcelName, dataset_name
                             else:
                                 print('Invalid Option.')
                         except ValueError:
@@ -113,7 +110,7 @@ class utils:
             else:
                 print('No Initial Cluster Found.')
 
-    def load_data(data_name,xlsxname):
+    def load_data(data_name,xlsxname,sheet_num):
         print("=========================================== Loading datasets... ====================================================")
         print( f'Dataset Selected: {data_name}')
         cost_files = {
@@ -146,10 +143,8 @@ class utils:
             print(f"filepath: {filepath}")
             while True:
                 try:
-                    sheet_Num = input('Enter a valid Sheet Number (1-30): ')
-                    sheet_Num_int = int(sheet_Num)
-                    sheet_name = 'Sheet' + str(sheet_Num_int)
-                    if 1 <= sheet_Num_int <= 30:
+                    sheet_name = 'Sheet' + str(sheet_num)
+                    if 1 <= sheet_num <= 30:
                         print()
                         t = pd.read_excel(filepath, sheet_name=sheet_name)
                         print(t)
