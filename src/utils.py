@@ -34,8 +34,7 @@ class utils:
         """ Menu for selecting datasets and filenames"""
         while True:
             print("=========================================== Selecting datasets... ==================================================")
-            print('Choose dataset:\nC2CM Datasets: cost\nIMT-2020 Datasets: imt2020')
-            print()
+            print(f'Dataset Selected: {dataset_name}')
             match dataset_name:
                 case 'cost':
                     print("=========================================== C2CM dataset is selected ===============================================")
@@ -51,7 +50,7 @@ class utils:
                     ]
                     for i, name in enumerate(cost_options, 1):
                         print(f"{i} - {name}")
-                    print("=========================================== C2CM dataset is selected ===============================================")
+                    print("=========================================== C2CM file name selected ===============================================")
                     while True:
                         try: 
                             if 1 <= dataset_number <= len(cost_options):
@@ -149,8 +148,10 @@ class utils:
                         t = pd.read_excel(filepath, sheet_name=sheet_name)
                         print(t)
                         data = t.to_numpy()
-                        x_train = data[:, :-2]
-                        y_train = utils.relabel(data[:, -1])
+                        x_train = data[0:, :-2]
+                        y_train = utils.relabel(data[0:, -1])
+                        print(f'x_train: {x_train}'
+                              f'\ny_train: {y_train}')
                         print('============================================ Data Loaded Successfully ===============================================')
                         print(f"x_train shape: {x_train.shape}, y_train shape: {np.array(y_train).shape}, sheet_name: {sheet_name}")
                         return x_train, y_train, sheet_name

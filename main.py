@@ -73,7 +73,6 @@ if __name__ == '__main__':
     xlsxname, dataset_name = utils.menu('Sample', dataset_name, dataset_number)
     clustering_results_path = os.path.join('clustering_results', dataset_name)
     full_clustering_results_path = os.path.join(clustering_results_path, f'{xlsxname}.xlsx')
-    print("")
     print("=========================================== Save Directory & Dataset Name ==========================================")
     print(f"Save Directory: {save_dir_name}, Dataset Name: {dataset_name}")
     path_dir = Path(os.path.join(save_dir_name, dataset_name))
@@ -96,7 +95,6 @@ if __name__ == '__main__':
     print(f"Excel file created: {xlsxname}.xlsx")
     while True:
         try:
-            print("=========================================== Select your choice... ==================================================")
             print()
             print('0 - Proceed')
             print('1 - Create a New Excel File')
