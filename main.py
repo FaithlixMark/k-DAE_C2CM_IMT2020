@@ -49,8 +49,9 @@ if __name__ == '__main__':
     FLAGS, unparsed = parser.parse_known_args()
     save_dir_name = FLAGS.save_dir
     dataset_name = FLAGS.dataset_name
-
     xlsxname, dataset_name = utils.menu('Sample')
+    clustering_results_path = os.path.join('clustering_results', dataset_name)
+    full_clustering_results_path = os.path.join(clustering_results_path, f'{xlsxname}.xlsx')
     print("")
     print("=========================================== Save Directory & Dataset Name ==========================================")
     print(f"Save Directory: {save_dir_name}, Dataset Name: {dataset_name}")
@@ -82,10 +83,13 @@ if __name__ == '__main__':
             option1 = int(input('Select your choice: '))
             if option1 == 1:
                 df1 = pd.DataFrame()
-                df1.to_excel(str(xlsxname)+'.xlsx')
+                df1.to_excel(full_clustering_results_path, index=False)
+                print('full_clustering_results_path:', full_clustering_results_path)
                 print("Excel file created: {}.xlsx".format(xlsxname))
                 break
             elif option1 == 2:
+                print('full_clustering_results_path:', full_clustering_results_path)
+                print("Excel file already created: {}.xlsx".format(xlsxname))
                 break
             else:
                 print('Invalid Option. Please try again.')
@@ -161,7 +165,7 @@ if __name__ == '__main__':
                         :k_means_acc,'JAC':k_means_jac,'TRUE':n_cluster,'INITIAL'
                         :n_initial,'PRED':n_pred,'TIME':"%d:%02d:%02d" % (hr, mon, sec),
                         'Reconstruction Error': reconstruction_errors},index=[0])
-    writer = ExcelWriter(xlsxname+'.xlsx', mode='a', if_sheet_exists='overlay') 
+    writer = ExcelWriter(full_clustering_results_path, mode='a', if_sheet_exists='overlay') 
     df1.to_excel(writer, sheet_name='Sheet1', index=False, startrow=1, 
                  startcol=((col_num - 1)*3))
     df2.to_excel(writer, sheet_name='Sheet1', index=False, startrow=0, 

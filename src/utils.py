@@ -1,6 +1,7 @@
 """
 //------------------------------------------------------------
  Title: utils.py
+ Author: Mark Macapagal
  Description: Utility functions for k-DAE algorithm
  Date: June 2024
  Version: 1.0
