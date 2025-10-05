@@ -64,12 +64,14 @@ if __name__ == '__main__':
                         default=1,
                         help='1 for create a new excel file, 0 for not creating a new excel file [0,1] ')
 
+    ## Parse the arguments
     FLAGS, unparsed = parser.parse_known_args()
     save_dir_name = FLAGS.save_dir
     dataset_name = FLAGS.dataset_name
     dataset_number = FLAGS.dataset_number
     sheet_number = FLAGS.sheet_number
     create_new_excel = FLAGS.create_new_excel
+    
     xlsxname, dataset_name = utils.menu('Sample', dataset_name, dataset_number)
     clustering_results_path = os.path.join('clustering_results', dataset_name)
     full_clustering_results_path = os.path.join(clustering_results_path, f'{xlsxname}.xlsx')
