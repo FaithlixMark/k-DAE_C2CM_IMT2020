@@ -17,7 +17,7 @@ from keras.models import Model
 import tensorflow as tf
 from keras.callbacks import ModelCheckpoint, Callback
 import os
-#tf.config.set_visible_devices([],'GPU')
+import tensorflow as tf
 os.environ["CUDA_VISIBLE_DEVICES"]="0"  
 
 
@@ -39,8 +39,8 @@ class ChangeCluster(Callback):
 
 
 class KDae:
-    def __init__(self, number_cluster, dataset_name='temp', k_dae_epoch=5, ae_initial_dim=(7, 5, 2,5,7),
-                 initial_epoch=100, ae_dim=(7, 5, 2,5,7), epoch_ae=20, batch_size=256, save_dir='save'):
+    def __init__(self, number_cluster, dataset_name='temp', k_dae_epoch=40, ae_initial_dim=(500, 500, 2000, 10),
+                 initial_epoch=3, ae_dim=(500, 100, 10), epoch_ae=30, batch_size=256, save_dir='save'):
         self.number_cluster = number_cluster
         self.k_dae_epoch = k_dae_epoch
         self.ae_initial_dim = ae_initial_dim
@@ -55,13 +55,17 @@ class KDae:
         self.ae_models_list = []
         self.k_dae_model = None
         self.reconstruction_errors = []
+        print(f'number_cluster: {number_cluster}\nk_dae_epoch: {k_dae_epoch}\nepoch_ae: {epoch_ae}\ninitial_epoch: {initial_epoch}\ndataset_name: {dataset_name}')
 
     def _initial_clustering(self, x_data):
+        print("Start routine _initial_clustering")
         _, input_dim = x_data.shape
+        print(f'input_dim: {input_dim}')
         self.initial_ae = AutoEncoder(input_dim, self.ae_initial_dim, epoch=self.initial_epoch)
         self.initial_ae.auto_encoder_model()
         embed = self.initial_ae.fit(x_data)
         k_means_initial_model = utils.k_means(embed, self.number_cluster)
+        print("Finish initial clustering")
         return k_means_initial_model.labels_
 
     def _create_combination_model(self, input_dim):
@@ -92,6 +96,7 @@ class KDae:
         return self.reconstruction_errors
     
     def fit(self, x_data, y_data=None, dataset_name='temp', save_init_label=True, is_pre_train=False):
+        optimizer_sgd = tf.keras.optimizers.legacy.SGD(learning_rate=0.01, momentum=0.9)
         input_size, input_dim = x_data.shape
         if is_pre_train:
             try:
@@ -100,31 +105,37 @@ class KDae:
                 logging.warning("initial clustering didn't find, start initial AE")
                 self.initial_label = self._initial_clustering(x_data)
         else:
+            print("Start initial AE in routine fit k_dae")
             self.initial_label = self._initial_clustering(x_data)
         if y_data is not None:
+            print("Initial clustering result")
             logging.info("########Initial Clustering Results########")
             _ = utils.cluster_performance(self.initial_label, y_data)
         if save_init_label:
+            print("Save the initial clustering")
             logging.info("Save the initial clustering")
             np.save(os.path.join(self.save_dir, dataset_name, 'initial_cluster'), self.initial_label) 
             _ = y_data
 
         for i in range(self.number_cluster):
+            print(f"Create and train ae model for cluster {i}")
             logging.info("model number {} create".format(i))
             self.ae_models_list.append(AutoEncoder(input_dim, self.ae_dim, epoch=self.epoch_ae, verbose=1))
             self.ae_models_list[i].auto_encoder_model()
             # train each ae with the initial clustering
             self.ae_models_list[i].fit(x_data[self.initial_label == i])
         if y_data is not None:
+            print("Clustering result after each ae train separately")
             y_predict = self.predict(x_data)
             logging.info("Clustering result after each ae train separately")
             _ = utils.cluster_performance(y_predict, y_data)
         check = ModelCheckpoint('k_dae_' + dataset_name, monitor='loss', save_best_only=True)
         cb = [check]
         if y_data is not None:
+            print("Add ChangeCluster callback")
             cb.append(ChangeCluster(self, x_data, y_data))
         self.k_dae_model = self._create_combination_model(input_dim)
-        self.k_dae_model.compile(optimizer='SGD', loss=self.k_dae_loss)
+        self.k_dae_model.compile(optimizer= optimizer_sgd, loss=self.k_dae_loss)
         x_repeat = np.repeat(x_data[:, np.newaxis, :], self.number_cluster, axis=1)    
         self.k_dae_model.fit(x_data, x_repeat, epochs=self.k_dae_epoch, batch_size=self.batch_size,
                              callbacks=cb)
@@ -134,6 +145,7 @@ class KDae:
     def predict(self, x_data):
         reconstruction_norm = []
         for i in range(self.number_cluster):
+            print(f"Predicting using ae model for cluster {i}")
             reconstruct = self.ae_models_list[i].model.predict(x_data)
             delta = x_data - reconstruct
             reconstruction_norm.append(np.linalg.norm(delta, axis=1))

@@ -13,13 +13,13 @@ from keras.layers import Input, Dense, GaussianNoise
 from keras.models import Model
 import keras
 from keras.callbacks import EarlyStopping, ModelCheckpoint
-from keras.layers import Activation
-from keras.optimizers import SGD 
+import tensorflow as tf
 
 
 class AutoEncoder:
+    optimizer_sgd = tf.keras.optimizers.legacy.SGD(learning_rate=0.01, momentum=0.9)
     def __init__(self, data_dim, hidden_dim, batch_normalize=True, epoch=100, batch_size=256, loss='binary_crossentropy',
-                 optimizer='SGD', save_name='temp', verbose=1, save_model=False):
+                 optimizer= optimizer_sgd, save_name='temp', verbose=1, save_model=False):
         self.data_dim = data_dim
         self.hidden_dim = hidden_dim
         self.batch_normalize = batch_normalize
@@ -34,8 +34,8 @@ class AutoEncoder:
         self.embedding_model = None
 
     def auto_encoder_model(self):
+        print("Starting routine auto_encoder_model")
         print(self.hidden_dim)
-
         init = 'glorot_uniform'
         inputs = Input(shape=(self.data_dim,), name='z')
         # ran = tf.random_normal(shape=(self.data_dim,), mean=0, stddev=0.1)
@@ -45,16 +45,15 @@ class AutoEncoder:
             x = Dense(i, kernel_initializer=init, name='encoder_%d' % j)(x)
             if self.batch_normalize:
                 x = BatchNormalization()(x)
-            #x = keras.layers.ELU()(x)
-            x = Activation('sigmoid')(x) 
+            x = keras.layers.ELU()(x)
         embedding_layer = Dense(self.hidden_dim[-1], kernel_initializer=init, name='embedding_layer')(x)
         x = embedding_layer
         for j, i in enumerate(self.hidden_dim[1::-1]):
             x = Dense(i, kernel_initializer=init, name='decode_%d' % j)(x)
             if self.batch_normalize:
                 x = BatchNormalization()(x)
-            #x = keras.layers.ELU()(x)
-            x = Activation('sigmoid')(x)  
+            x = keras.layers.ELU()(x)
+            # x = Activation('sigmoid')(x)  
         x = Dense(self.data_dim, kernel_initializer=init, activation='sigmoid', name='decoder_0')(x)
         decode = x
         model = Model(inputs=inputs, outputs=decode)
@@ -64,8 +63,7 @@ class AutoEncoder:
         self.embedding_model = embedding_model
 
     def fit(self, x_train, patience=10):
-        sgd = SGD()  # Create SGD optimizer object
-        self.model.compile(loss=self.loss, optimizer=sgd)
+        print("Starting routine fit in AutoEncoder")
         self.model.compile(loss=self.loss, optimizer=self.optimizer)
         early_stopping = EarlyStopping(monitor='loss', patience=patience)
         callback_name = [early_stopping]

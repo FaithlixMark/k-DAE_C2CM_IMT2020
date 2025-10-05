@@ -71,7 +71,7 @@ if __name__ == '__main__':
     dataset_number = FLAGS.dataset_number
     sheet_number = FLAGS.sheet_number
     create_new_excel = FLAGS.create_new_excel
-    
+
     xlsxname, dataset_name = utils.menu('Sample', dataset_name, dataset_number)
     clustering_results_path = os.path.join('clustering_results', dataset_name)
     full_clustering_results_path = os.path.join(clustering_results_path, f'{xlsxname}.xlsx')
@@ -122,11 +122,8 @@ if __name__ == '__main__':
     tic = timeit.default_timer()
     print('================================ Initializing k-DAE model variablies ... ============================================')
     n_cluster = len(np.unique(y_train))
-    k_dae_epoch = 5
-    epoch_ae = 20
-    initial_epoch = 100 
-    model = KDae(number_cluster=n_cluster, k_dae_epoch=k_dae_epoch, epoch_ae=epoch_ae, initial_epoch=initial_epoch, dataset_name=dataset_name)
-    print(f'number_cluster: {n_cluster}\nk_dae_epoch: {k_dae_epoch}\nepoch_ae: {epoch_ae}\ninitial_epoch: {initial_epoch}\ndataset_name: {dataset_name}\nsheet_name: {sheet_name}')
+    model = KDae(number_cluster=n_cluster, k_dae_epoch=40, epoch_ae=10, initial_epoch=80, dataset_name=dataset_name)
+    print(f'sheet_name: {sheet_name}')
     print("=========================================== Running k-DAE model... ==================================================")
     try:
         print("===================================== Fitting the k-DAE model... ====================================================")
@@ -165,12 +162,9 @@ if __name__ == '__main__':
     y_initial = list(map(int, y_initial_raw.split()))
     y_initial = np.array(y_initial)
     n_initial = len(np.unique(y_initial))
-    k_means_nmi_ini = metrics.normalized_mutual_info_score(y_train, y_initial)
-    k_means_ari_ini = metrics.adjusted_rand_score(y_train, y_initial)
-    k_means_acc_ini = utils.acc(np.intp(y_train), y_initial)
-    k_means_jac_ini = 1 - hamming(np.intp(y_train),utils.relabel(y_initial))
-    
-    print()
+    k_means_nmi_ini, k_means_acc_ini, k_means_ari_ini, k_means_jac_ini = utils.cluster_performance(y_initial, y_train)
+    print(f'y_initial: {y_initial}, \ny_train: {y_train} \nn_initial: {n_initial}')
+
     col_num = int(sheet_name.replace('Sheet', ''))
     print('======================================== Saving results to Excel... =================================================')
     print(f'Column Number to be saved: Sheet{col_num}')
