@@ -61,6 +61,7 @@ class AutoEncoder:
         #plot_model(model, to_file='autoencoder.png', show_shapes=True)
         self.model = model
         self.embedding_model = embedding_model
+        print("Autoencoder model created.")
 
     def fit(self, x_train, patience=10):
         print("Starting routine fit in AutoEncoder")
